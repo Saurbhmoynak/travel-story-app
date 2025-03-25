@@ -8,7 +8,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
 //database
-const User = require("./models/user.model")
+const User = require("./models/user.model");
+const { authenticateToken } = require('./middlewares/auth.middleware');
 mongoose.connect(config.connectionString);
 
 
@@ -91,7 +92,7 @@ app.post("/login", async (req, res) => {
   }
 
   const accessToken = jwt.sign(
-    { userID: user._id },
+    { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: "72h",
@@ -106,8 +107,30 @@ app.post("/login", async (req, res) => {
   })
 });
 
-app.post("/get-user", async (req, res) => {
+//get user
+app.get("/get-user",authenticateToken,async (req, res) => {
+  try {
+    const { userId } = req.user; //Extract userId from decoded token
+    //console.log("Decoded Token:", req.user);
+
+    const isUser = await User.findOne({ _id: userId }); //Find user in DB
+    
+    //console.log("User found:", isUser);
+
   
+    if (!isUser) {
+      return res.status(404).json({message:"User not found"}); // If user not found, return Unauthorized
+    }
+  
+    return res.status(200).json({
+      user: isUser,
+      message: "User retrieved successfully",
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" }); 
+  }
 });
 
 
