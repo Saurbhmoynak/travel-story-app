@@ -12,5 +12,5 @@ const travelStorySchema = new Schema({
   visitedDate: { type: Date, required: true },
 });
 
-module.exports = mongoose.model("tavelstory", travelStorySchema);
+module.exports = mongoose.model("TravelStory", travelStorySchema);
 
