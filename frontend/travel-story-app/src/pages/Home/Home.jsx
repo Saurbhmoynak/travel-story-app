@@ -8,11 +8,24 @@ import Modal from "react-modal";
 import { ToastContainer, toast } from "react-toastify";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
+import EmptyCard from "../../components/Cards/EmptyCard";
+
+import img1 from "../../assets/images/add-story/img1.svg";
+import img2 from "../../assets/images/add-story/img2.svg";
+import img3 from "../../assets/images/add-story/img3.svg";
+import { DayPicker } from "react-day-picker";
+import moment from "moment";
 
 const Home = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [allStories, setAllStories] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState("");
+
+  const [dataRange, setDataRange] = useState({ from: null, to: null });
+
   const [openAddEditModel, setOpenAddEditModel] = useState({
     isShown: false,
     type: "add",
@@ -50,7 +63,9 @@ const Home = () => {
     }
   };
 
-  const handleEdit = async (data) => {};
+  const handleEdit = async (data) => {
+    setOpenAddEditModel({ isShown: true, type: "edit", data: data });
+  };
 
   const handleViewStory = async (data) => {
     setOpenViewModal({ isShown: true, data });
@@ -78,6 +93,79 @@ const Home = () => {
     }
   };
 
+  //Delete story
+  const deleteTravelStory = async (data) => {
+    const storyId = data._id;
+
+    try {
+      const response = await apiRequest.delete("/delete-story/" + storyId);
+
+      if (response.data && !response.data.error) {
+        toast.error("Story Deleted Successfully !");
+        setOpenViewModal((prev) => ({ ...prev, isShown: false }));
+        getAllTravelStories();
+      }
+    } catch (error) {
+      console.error(
+        "Error updating story:",
+        error.response?.data || error.message
+      );
+      toast.error("Something went wrong!");
+    }
+  };
+
+  //search story
+  const onSearchStory = async (query) => {
+    try {
+      const response = await apiRequest.get("/search", {
+        params: {
+          query,
+        },
+      });
+
+      if (response.data && response.data.stories) {
+        setFilterType("Search");
+        setAllStories(response.data.stories);
+      }
+    } catch (error) {
+      //handle unexpected errors
+      console.log("An unexpected error occurred. Please ry again");
+    }
+  };
+
+  const handleClearSearch = () => {
+    setFilterType("");
+    getAllTravelStories();
+  };
+
+  //handle filter travel stories
+  const filterStoriesByDate = async (day) => {
+    try {
+      const startDate = day.from ? moment(day.from).valueOf() : null;
+      const endDate = day.to ? moment(day.to).valueOf() : null;
+
+      if (startDate && endDate) {
+        const response = await apiRequest.get("/travel-stories/filter", {
+          params: { startDate, endDate },
+        });
+
+        if (response.data && response.data.stories) {
+          setFilterType("date");
+          setAllStories(response.data.stories);
+        }
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  //handle data range select
+
+  const handleDayClick = (day) => {
+    setDataRange(day);
+    filterStoriesByDate(day);
+  };
+
   useEffect(() => {
     getAllTravelStories();
     getUserInfo();
@@ -87,9 +175,15 @@ const Home = () => {
   //Get user info
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar
+        userInfo={userInfo}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onSearchNote={onSearchStory}
+        handleClearSearch={handleClearSearch}
+      />
       <div className="container mx-auto py-10">
-        <div className="flex gap-7">
+        <div className="flex gap-10">
           <div className="flex-1">
             {allStories.length > 0 ? (
               <div className="grid grid-cols-2 gap-4">
@@ -109,10 +203,25 @@ const Home = () => {
                 ))}
               </div>
             ) : (
-              <>Empty Card Here</>
+              <EmptyCard
+                imgSrcList={[img1, img2, img3]}
+                message="Start creating your first Travel Story! Click the 'Add' button to document your thoughts, ideas, and memories. Let's get started!"
+              />
             )}
           </div>
-          <div className="w-[320px]"></div>
+          <div className="w-[330px]">
+            <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+              <div className="pr-3 pl-4 pt-2 pb-2">
+                <DayPicker
+                  captionLayout="dropdown-buttons"
+                  mode="range"
+                  selected={dataRange} // Pass the selected date range here
+                  onSelect={handleDayClick} // Use onDayClick to handle the selection
+                  pageNavigation
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -156,9 +265,16 @@ const Home = () => {
         {/* Component for adding or editing a travel story */}
         <ViewTravelStory
           storyInfo={openViewModal.data || null}
-          onClose={() => {}}
-          onEditClick={() => {}}
-          OnDeleteClick={() => {}}
+          onClose={() => {
+            setOpenViewModal((prev) => ({ ...prev, isShown: false }));
+          }}
+          onEditClick={() => {
+            setOpenViewModal((prev) => ({ ...prev, isShown: false }));
+            handleEdit(openViewModal.data || null);
+          }}
+          OnDeleteClick={() => {
+            deleteTravelStory(openViewModal.data || null);
+          }}
         />
       </Modal>
 

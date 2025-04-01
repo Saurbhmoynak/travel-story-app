@@ -39,17 +39,17 @@
   }
 
   body::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 5px; /* Width of the scrollbar */
   }
   
   body::-webkit-scrollbar-track {
     background: #f1f1f1; /* Background color */
-    border-radius: 10px;
+    border-radius: 0px 0px 0px 0px;
   }
   
   body::-webkit-scrollbar-thumb {
     background: #0586D3; /* Scrollbar color */
-    border-radius: 10px;
+    border-radius: 0px 0px 0px 0px;
   }
   
   body::-webkit-scrollbar-thumb:hover {
@@ -61,21 +61,17 @@
 
 @layer components{
   .scrollbar::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 4px; /* Width of the scrollbar */
   }
   
   .scrollbar::-webkit-scrollbar-track {
     background: #f1f1f1; /* Background color */
-    border-radius: 10px;
+    border-radius: 0px 2px 2px 0px;
   }
   
   .scrollbar::-webkit-scrollbar-thumb {
     background: #0586D3; /* Scrollbar color */
-    border-radius: 10px;
-  }
-  
-  .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #0369A1; /* Color when hovered */
+    border-radius: 0px 2px 2px 0px;
   }
 
   .input-box{
@@ -103,11 +99,11 @@
   }
 
   .btn-small{
-    @apply flex items-center gap-1 text-xs font-medium bg-cyan-50 text-2xl shadow-cyan-100/0 border border-cyan-100 hover:bg-cyan-400 hover:text-white rounded px-4 py-[3px];
+    @apply flex items-center gap-1 text-xs font-medium bg-cyan-50 text-2xl shadow-cyan-100/0 border border-cyan-100 hover:bg-cyan-400 hover:text-white rounded px-4 py-[3px] cursor-pointer;
   }
 
   .btn-delete{
-    @apply bg-rose-50 text-rose-500 shadow-rose-100/0 border border-rose-100 hover:bg-rose-500 hover:text-white;
+    @apply bg-rose-50 text-rose-500 shadow-rose-100/0 border cursor-pointer border-rose-100 hover:bg-rose-500 hover:text-white;
   }
 
   .input-label{

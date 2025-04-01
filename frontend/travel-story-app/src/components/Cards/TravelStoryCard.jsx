@@ -20,7 +20,7 @@ const TravelStoryCard = ({
       <img
         src={imgUrl}
         alt={title}
-        className='w-full h-56 object-cover rounded-lg'
+        className='w-full h-60 object-cover rounded-lg'
         onClick={onClick}
       />
 
@@ -38,7 +38,7 @@ const TravelStoryCard = ({
             </span>
           </div>
         </div>
-        <p className='text-xs text-slate-600 mt-2'>{story?.slice(0, 60)}</p>
+        <p className='text-xs text-slate-600 mt-2'>{story?.slice(0, 100)+' . . . . . . . . . . . . Click on story'}</p>
 
         <div className='inline-flex items-center gap-2 text-[13px] text-cyan-600 bg-cyan-200/40 rounded mt-3 px-2 py-1'>
           <GrMapLocation className='text-sm' />

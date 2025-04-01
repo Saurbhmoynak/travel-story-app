@@ -14,11 +14,11 @@ const AddEditTravelStory = ({
   onClose,
   getAllTravelStories,
 }) => {
-  const [title, setTitle] = useState("");
-  const [storyImg, setStoryImg] = useState(null);
-  const [story, setStory] = useState("");
-  const [visitedLocation, setVisitedLocation] = useState([]);
-  const [visitedDate, setVisitedDate] = useState(null);
+  const [title, setTitle] = useState(storyInfo?.title||"");
+  const [storyImg, setStoryImg] = useState(storyInfo?.imageUrl||null);
+  const [story, setStory] = useState(storyInfo?.story||"");
+  const [visitedLocation, setVisitedLocation] = useState(storyInfo?.visitedLocation||[]);
+  const [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate||null);
   const [error, setError] = useState(null);
 
   //add new story
@@ -61,7 +61,50 @@ const AddEditTravelStory = ({
   };
 
   //update travel story
-  const updateTravelStory = async () => {};
+  const updateTravelStory = async () => {
+    const storyId = storyInfo._id;
+    try {
+      let imageUrl = "";
+
+      let postData = {
+        title,
+        story,
+        imageUrl: storyInfo.imageUrl || "",
+        visitedLocation,
+        visitedDate: visitedDate
+          ? moment(visitedDate).valueOf()
+          : moment().valueOf(),
+      }
+
+      //upload image if present
+
+      if (typeof storyImg === 'object') {
+        //upload new image
+        const imgUploadRes = await uploadImage(storyImg);
+        imageUrl = imgUploadRes.imageUrl || "";
+
+        postData = {
+          ...postData,
+          imageUrl: imageUrl,
+        };
+      }
+
+      const response = await apiRequest.put("/edit-story/"+storyId, postData);
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Story Updated Successfully");
+        //Refresh stories
+        getAllTravelStories();
+        //close model or form
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error updating story:",
+        error.response?.data || error.message
+      );
+      toast.error("Something went wrong!");
+    }
+  };
 
   const handleAddOrUpdateClick = () => {
     console.log({ title, story, visitedLocation, visitedDate });
@@ -90,7 +133,31 @@ const AddEditTravelStory = ({
     }
   };
 
-  const handleDeleteStoryImg = async () => {};
+  const handleDeleteStoryImg = async () => {
+    //Deleting the image
+    const deleteImgRes = await apiRequest.delete("/delete-image", {
+      params: {
+        imageUrl: storyInfo.imageUrl,
+      },
+    });
+
+    if (deleteImgRes.data) {
+      const storyId = storyInfo._id;
+      const postData = {
+        title,
+        story,
+        visitedLocation,
+        visitedDate: moment().valueOf(),
+        imageUrl:"",
+      }
+
+      //updating story
+      const response = await apiRequest.put("/edit-story/" + storyId, postData);
+
+      setStoryImg(null);
+    }
+  };
+
   return (
     <div className="relative">
       <div className="flex items-center justify-between">

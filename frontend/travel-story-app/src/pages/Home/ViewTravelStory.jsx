@@ -24,7 +24,7 @@ const ViewTravelStory = ({
             </button>
 
             <button className="" onClick={onClose}>
-              <MdClose className="text-xl text-slate-400" />
+              <MdClose className="text-xl text-slate-400 cursor-pointer" />
             </button>
           </div>
         </div>
