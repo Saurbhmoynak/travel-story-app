@@ -321,7 +321,7 @@ app.put("/edit-story/:id", authenticateToken, async (req, res) => {
       return res.status(400).json({ error: true, message: "Travel story not found" });
     }
 
-    const placeholderImgUrl = `http://localhost:8000/assets/placeholder.jpg`;
+    const placeholderImgUrl = `https://travel-story-app-six.vercel.app/assets/placeholder.jpg`;
 
     travelStory.title = title;
     travelStory.story = story;
