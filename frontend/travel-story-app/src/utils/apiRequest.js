@@ -1,8 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
 
 const apiRequest = axios.create({
-  baseURL: BASE_URL,
+  baseURL: import.meta.env.VITE_BACKEND_BASEURL,
   timeout: 10000,
   headers: {
     // Default headers for all requests
