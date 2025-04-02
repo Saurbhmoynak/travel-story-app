@@ -27,12 +27,14 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: 'https://travel-story-app-nwdt.vercel.app', // Using environment variable
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'https://travel-story-app-nwdt.vercel.app', // Using environment variable
+//     credentials: true,
+//   })
+// );
+
+app.use(cors({ origin: "*" }));
 
 //backend url form env and vercel
 const backendUrl = process.env.BACKEND_URL || "https://travel-story-app-six.vercel.app";
