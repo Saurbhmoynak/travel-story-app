@@ -1,5 +1,4 @@
 require("dotenv").config();
-const config = require("./config.json");
 const mongoose = require("mongoose");
 
 //middlewares
@@ -22,11 +21,22 @@ const User = require("./models/user.model");
 const TravelStory = require("./models/travelStory.model");
 const travelStoryModel = require("./models/travelStory.model");
 const { error } = require("console");
-mongoose.connect(config.connectionString);
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB connected successfully!"))
+.catch(err => console.error("MongoDB connection error:", err));
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // Using environment variable
+    credentials: true,
+  })
+);
 
 //create account
 app.post("/create-account", async (req, res) => {
