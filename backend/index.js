@@ -15,7 +15,6 @@ const path = require("path");// Path module to handle file paths
 //custom middlewares
 const { authenticateToken } = require("./middlewares/auth.middleware");
 
-
 //database
 const User = require("./models/user.model");
 const TravelStory = require("./models/travelStory.model");
@@ -35,10 +34,12 @@ app.use(
   })
 );
 
+//backend url form env and vercel
+const backendUrl = process.env.BACKEND_URL || "https://travel-story-app-six.vercel.app";
+
 app.get("/", (req, res) => {
   res.send("Backend is running successfully!");
 });
-
 
 //create account
 app.post("/create-account", async (req, res) => {
@@ -156,7 +157,7 @@ app.post("/image-upload", upload.single("image"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: true, message: "No file uploaded" });
     }
-    const imageUrl = `https://travel-story-app-six.vercel.app/uploads/${req.file.filename}`;
+    const imageUrl = `${backendUrl}/uploads/${req.file.filename}`;
 
     res.status(200).json({ imageUrl });
   } catch (error) {
@@ -321,7 +322,7 @@ app.put("/edit-story/:id", authenticateToken, async (req, res) => {
       return res.status(400).json({ error: true, message: "Travel story not found" });
     }
 
-    const placeholderImgUrl = `https://travel-story-app-six.vercel.app/assets/placeholder.jpg`;
+    const placeholderImgUrl = `${backendUrl}/assets/placeholder.jpg`;
 
     travelStory.title = title;
     travelStory.story = story;
