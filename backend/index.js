@@ -22,12 +22,9 @@ const TravelStory = require("./models/travelStory.model");
 const travelStoryModel = require("./models/travelStory.model");
 const { error } = require("console");
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected successfully!"))
-.catch(err => console.error("MongoDB connection error:", err));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB connected successfully!"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 const app = express();
 app.use(express.json());
@@ -37,6 +34,11 @@ app.use(
     credentials: true,
   })
 );
+
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully!");
+});
+
 
 //create account
 app.post("/create-account", async (req, res) => {
