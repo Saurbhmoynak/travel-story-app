@@ -3,7 +3,7 @@
 @import "tailwindcss";
 :root {
   --login-bg-img:url('../src/assets/images/bg-image2.jpg');
-  --signup-bg-img:url('../src/assets/images/signup-bg-img.jpg');
+  --signup-bg-img:url('../src/assets/images/signup-image.jpg');
 }
 
 .login-bg{

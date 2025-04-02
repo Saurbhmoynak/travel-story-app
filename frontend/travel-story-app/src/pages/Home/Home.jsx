@@ -15,6 +15,9 @@ import img2 from "../../assets/images/add-story/img2.svg";
 import img3 from "../../assets/images/add-story/img3.svg";
 import { DayPicker } from "react-day-picker";
 import moment from "moment";
+import FilterInfoTitle from "../../components/Cards/FilterInfoTitle";
+import DateRangeChip from "../../components/Cards/DateRangeChip";
+import { getEmptyCardMessage } from "../../utils/helper";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,7 +27,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("");
 
-  const [dataRange, setDataRange] = useState({ from: null, to: null });
+  const [dateRange, setDateRange] = useState({ from: null, to: null });
 
   const [openAddEditModel, setOpenAddEditModel] = useState({
     isShown: false,
@@ -85,7 +88,14 @@ const Home = () => {
       // If the response contains updated story data, refresh the stories list
       if (response.data && response.data.story) {
         toast.success("Story updated successfully");
-        getAllTravelStories(); // Fetch updated travel stories after update
+
+        if (filterType === "search" && searchQuery) {
+          onSearchStory(searchQuery);
+        } else if (filterType === "date") {
+          filterStoriesByDate(DateRange)
+        } else {
+            getAllTravelStories();
+        }// Fetch updated travel stories after update
       }
     } catch (error) {
       // Log a generic error message in case of failure
@@ -126,10 +136,10 @@ const Home = () => {
       if (response.data && response.data.stories) {
         setFilterType("Search");
         setAllStories(response.data.stories);
-      }
+      } 
     } catch (error) {
       //handle unexpected errors
-      console.log("An unexpected error occurred. Please ry again");
+      toast.error("No search results found.");
     }
   };
 
@@ -162,9 +172,17 @@ const Home = () => {
   //handle data range select
 
   const handleDayClick = (day) => {
-    setDataRange(day);
+    setDateRange(day);
     filterStoriesByDate(day);
   };
+
+  //handle Data range select
+
+  const resetFilter = () => {
+    setDateRange({ from: null, to: null });
+    setFilterType("");
+    getAllTravelStories();
+  }
 
   useEffect(() => {
     getAllTravelStories();
@@ -183,6 +201,13 @@ const Home = () => {
         handleClearSearch={handleClearSearch}
       />
       <div className="container mx-auto py-10">
+        <FilterInfoTitle
+          filterType={filterType}
+          filterDates={dateRange}
+          onClear={() => {
+            resetFilter();
+          }}
+        />
         <div className="flex gap-10">
           <div className="flex-1">
             {allStories.length > 0 ? (
@@ -204,8 +229,8 @@ const Home = () => {
               </div>
             ) : (
               <EmptyCard
-                imgSrcList={[img1, img2, img3]}
-                message="Start creating your first Travel Story! Click the 'Add' button to document your thoughts, ideas, and memories. Let's get started!"
+                  imgSrcList={[img1, img2, img3]}
+                  message={getEmptyCardMessage(filterType)}
               />
             )}
           </div>
@@ -215,7 +240,7 @@ const Home = () => {
                 <DayPicker
                   captionLayout="dropdown-buttons"
                   mode="range"
-                  selected={dataRange} // Pass the selected date range here
+                  selected={dateRange} // Pass the selected date range here
                   onSelect={handleDayClick} // Use onDayClick to handle the selection
                   pageNavigation
                 />
