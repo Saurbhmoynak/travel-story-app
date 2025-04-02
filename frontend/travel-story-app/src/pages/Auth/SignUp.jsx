@@ -87,6 +87,7 @@ const SignUp = () => {
       <div className="login-ui-box bg-cyan-200 -bottom-11 left-1/14" />
       <div className="container h-screen flex items-center justify-center px-20 mx-auto relative ">
         <div
+          style={{ backgroundImage: `url(${bgImage2})`}}
           className="w-2/4 h-[90vh] flex items-end bg-cover bg-center rounded-lg p-10 "
         >
           <div>
@@ -99,7 +100,7 @@ const SignUp = () => {
           </div>
         </div>
 
-        <div style={{ backgroundImage: `url(${bgImage2})` }} className="w-2/5 h-[75vh] bg-white rounded-r-lg p-16 shadow-lg shadow-cyan-200 ">
+        <div className="w-2/5 h-[75vh] bg-white rounded-r-lg p-16 shadow-lg shadow-cyan-200 ">
           <form onSubmit={handleSignUp}>
             <h4 className="text-2xl font-semibold mb-7">SignUp</h4>
             <input
