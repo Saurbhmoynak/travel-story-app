@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiRequest = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_BASEURL,
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     // Default headers for all requests
     "Content-Type": "application/json",
