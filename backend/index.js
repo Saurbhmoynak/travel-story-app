@@ -157,7 +157,7 @@ app.post("/image-upload", upload.single("image"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: true, message: "No file uploaded" });
     }
-    const imageUrl = `${backendUrl}/uploads/${req.file.filename}`;
+    const imageUrl = `https://travel-story-app-six.vercel.app/uploads/${req.file.filename}`;
 
     res.status(200).json({ imageUrl });
   } catch (error) {
