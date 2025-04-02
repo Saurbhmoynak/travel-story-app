@@ -4,7 +4,7 @@ import PasswordInput from "../../components/Input/PasswordInput";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import apiRequest from "../../utils/apiRequest";
-import bgImage from '../assets/images/bg-image2.jpg';
+import bgImage from '../../assets/images/bg-image2.jpg';
 
 
 const Login = () => {

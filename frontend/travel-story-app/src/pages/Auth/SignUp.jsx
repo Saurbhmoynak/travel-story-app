@@ -4,7 +4,7 @@ import PasswordInput from "../../components/Input/PasswordInput";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import apiRequest from "../../utils/apiRequest";
-import bgImage from '../assets/images/signup-image.jpg';
+import bgImage2 from '../../assets/images/signup-image.jpg';
 
 const SignUp = () => {
   const travelQuotes = [
@@ -86,7 +86,7 @@ const SignUp = () => {
       <div className="login-ui-box right-10 -top" />
       <div className="login-ui-box bg-cyan-200 -bottom-11 left-1/14" />
       <div className="container h-screen flex items-center justify-center px-20 mx-auto relative ">
-        <div style={{ backgroundImage: `url(${bgImage})` }} className="w-2/4 h-[90vh] flex items-end bg-cover bg-center rounded-lg p-10 ">
+        <div style={{ backgroundImage: `url(${bgImage2})` }} className="w-2/4 h-[90vh] flex items-end bg-cover bg-center rounded-lg p-10 ">
           <div>
             <h4 className="text-5xl text-white font-bold leading-[58px]">
               Join The <br /> Adventure
